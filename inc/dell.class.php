@@ -138,9 +138,12 @@ class PluginManufacturersimportsDell extends PluginManufacturersimportsManufactu
         $max_date = false;
         if (isset($info[0]['entitlements'])) {
             foreach ($info[0]['entitlements'] as $d) {
-                $date = new \DateTime($d['startDate']);
-                if ($max_date == false || $date > $max_date) {
-                    $max_date = $date;
+                // ProSupport / ProSupport Plus services
+                if (str_contains($d['serviceLevelDescription'], 'ProSupport')) {
+                    $date = new \DateTime($d['startDate']);
+                    if ($max_date == false || $date > $max_date) {
+                        $max_date = $date;
+                    }
                 }
             }
 
@@ -163,9 +166,12 @@ class PluginManufacturersimportsDell extends PluginManufacturersimportsManufactu
         $max_date = false;
         if (isset($info[0]['entitlements'])) {
             foreach ($info[0]['entitlements'] as $d) {
-                $date = new \DateTime($d['endDate']);
-                if ($max_date == false || $date > $max_date) {
-                    $max_date = $date;
+                // ProSupport / ProSupport Plus services
+                if (str_contains($d['serviceLevelDescription'], 'ProSupport')) {
+                    $date = new \DateTime($d['endDate']);
+                    if ($max_date == false || $date > $max_date) {
+                        $max_date = $date;
+                    }
                 }
             }
 
@@ -191,10 +197,13 @@ class PluginManufacturersimportsDell extends PluginManufacturersimportsManufactu
         $i        = false;
         if (isset($info[0]['entitlements'])) {
             foreach ($info[0]['entitlements'] as $k => $d) {
-                $date = new \DateTime($d['endDate']);
-                if ($max_date == false || $date > $max_date) {
-                    $max_date = $date;
-                    $i        = $k;
+                // ProSupport / ProSupport Plus services
+                if (str_contains($d['serviceLevelDescription'], 'ProSupport')) {
+                    $date = new \DateTime($d['endDate']);
+                    if ($max_date == false || $date > $max_date) {
+                        $max_date = $date;
+                        $i        = $k;
+                    }
                 }
             }
         }

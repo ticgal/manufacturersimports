@@ -696,7 +696,8 @@ class PluginManufacturersimportsPostImport extends CommonDBTM
         $ic = new Infocom();
         if ($ic->getfromDBforDevice($options["itemtype"], $options["ID"])) {
             //Original values
-            $warranty_date     = Html::convdate($ic->fields["warranty_date"]);
+            //$warranty_date     = Html::convdate($ic->fields["warranty_date"]);
+            $warranty_date     = $ic->fields["warranty_date"];
             $warranty_duration = $ic->fields["warranty_duration"];
             $warranty_info     = $ic->fields["warranty_info"];
             $buy_date          = $ic->fields["buy_date"];

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PLUGINNAME="docgen"
+PLUGINNAME="manufacturersimports"
 
 if [ ! "$#" -eq 2 ]
 then

@@ -4,28 +4,28 @@
  * -------------------------------------------------------------------------
  * Manufacturersimports plugin for GLPI
  * Copyright (C) 2009-2022 by the Manufacturersimports Development Team.
- * 
+ *
  * https://github.com/InfotelGLPI/manufacturersimports
  * -------------------------------------------------------------------------
- * 
+ *
  * LICENSE
- * 
+ *
  * This file is part of Manufacturersimports.
- * 
+ *
  * Manufacturersimports is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Manufacturersimports is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Manufacturersimports. If not, see <http://www.gnu.org/licenses/>.
  * --------------------------------------------------------------------------
- * 
+ *
  * -------------------------------------------------------------------------
  * Manufacturersimports plugin for GLPI
  * Copyright (C) 2023 by the TICgal Team.
@@ -102,9 +102,12 @@ class PluginManufacturersimportsPostImport extends CommonDBTM
         }
         $data        = '';
         $timeout     = 30;
-        $proxy_host  = !empty($CFG_GLPI["proxy_name"]) ? ($CFG_GLPI["proxy_name"] . ":" . $CFG_GLPI["proxy_port"]) : false; // host:port
-        $proxy_ident = !empty($CFG_GLPI["proxy_user"]) ? ($CFG_GLPI["proxy_user"] . ":" .
-                                                          (new GLPIKey())->decrypt($CFG_GLPI["proxy_passwd"])) : false; // username:password
+        $proxy_host  = !empty($CFG_GLPI["proxy_name"])
+            ? ($CFG_GLPI["proxy_name"] . ":" . $CFG_GLPI["proxy_port"])
+            : false;    // host:port
+        $proxy_ident = !empty($CFG_GLPI["proxy_user"])
+            ? ($CFG_GLPI["proxy_user"] . ":" . (new GLPIKey())->decrypt($CFG_GLPI["proxy_passwd"]))
+            : false;    // username:password
 
         $url = $options["url"];
 
@@ -130,13 +133,13 @@ class PluginManufacturersimportsPostImport extends CommonDBTM
 
         if (!empty($options['token'])) {
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
-               "Authorization: Bearer " . $options['token']
+                "Authorization: Bearer " . $options['token']
             ]);
         }
 
         if (!empty($options['ClientID'])) {
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
-               "ClientID: " . $options['ClientID']
+                "ClientID: " . $options['ClientID']
             ]);
         }
 
@@ -282,8 +285,8 @@ class PluginManufacturersimportsPostImport extends CommonDBTM
         echo "</table>";
         echo "<br><div align='center'>";
         echo "<a class='submit btn btn-primary' href='" . PLUGIN_MANUFACTURERSIMPORTS_WEBDIR . "/front/import.php?back=back&amp;itemtype=" .
-             $values["itemtype"] . "&amp;manufacturers_id=" . $values["manufacturers_id"] . "&amp;start=" . $values["start"] .
-             "&amp;imported=" . $values["imported"] . "'>";
+            $values["itemtype"] . "&amp;manufacturers_id=" . $values["manufacturers_id"] . "&amp;start=" . $values["start"] .
+            "&amp;imported=" . $values["imported"] . "'>";
         echo __('Back');
         echo "</a>";
         echo "</div>";
@@ -431,13 +434,13 @@ class PluginManufacturersimportsPostImport extends CommonDBTM
                         `" . $itemtable . "`.`name`,
                         `" . $itemtable . "`.`entities_id`,
                         `" . $itemtable . "`.`serial`
-          FROM `" . $itemtable . "`, `glpi_manufacturers`
-          WHERE `" . $itemtable . "`.`manufacturers_id` = `glpi_manufacturers`.`id`
-          AND `" . $itemtable . "`.`is_deleted` = '0'
-          AND `" . $itemtable . "`.`is_template` = '0'
-          AND `glpi_manufacturers`.`id` = '" . $manufacturerId . "'
-          AND `" . $itemtable . "`.`serial` != ''
-          AND `" . $itemtable . "`.`id` = '" . $ID . "' ";
+            FROM `" . $itemtable . "`, `glpi_manufacturers`
+            WHERE `" . $itemtable . "`.`manufacturers_id` = `glpi_manufacturers`.`id`
+            AND `" . $itemtable . "`.`is_deleted` = '0'
+            AND `" . $itemtable . "`.`is_template` = '0'
+            AND `glpi_manufacturers`.`id` = '" . $manufacturerId . "'
+            AND `" . $itemtable . "`.`serial` != ''
+            AND `" . $itemtable . "`.`id` = '" . $ID . "' ";
         $query  .= " ORDER BY `" . $itemtable . "`.`name`";
         $result = $DB->query($query);
 
@@ -572,8 +575,10 @@ class PluginManufacturersimportsPostImport extends CommonDBTM
                     "token"        => $values['token']
         ];
 
-        if ($suppliername == PluginManufacturersimportsConfig::LENOVO
-            && $supplier_key != null) {
+        if (
+            $suppliername == PluginManufacturersimportsConfig::LENOVO
+            && $supplier_key != null
+        ) {
             $options["ClientID"] = $supplier_key;
             $contents            = self::cURLData($options);
         }
@@ -592,7 +597,8 @@ class PluginManufacturersimportsPostImport extends CommonDBTM
             isset($_SESSION['glpi_use_mode'])
             && ($_SESSION['glpi_use_mode'] == Session::DEBUG_MODE)
         ) {
-            Toolbox::loginfo($contents);
+            // Not all contents are json, beware with big log files ! Discomment if needed
+            //Toolbox::loginfo($contents);
         }
         // On extrait la date de garantie de la variable contents.
         $field = self::selectSupplierfield($suppliername);
@@ -608,12 +614,14 @@ class PluginManufacturersimportsPostImport extends CommonDBTM
             $warrantyinfo = self::importWarrantyInfo($suppliername, $contents);
         }
 
-        if (isset($maDate)
+        if (
+            isset($maDate)
             && $maDate != "0000-00-00"
             && $maDate != false
             && isset($maDateFin)
             && $maDateFin != "0000-00-00"
-            && $maDateFin != false) {
+            && $maDateFin != false
+        ) {
             list($adebut, $mdebut, $jdebut) = explode('-', $maDate);
             list($afin, $mfin, $jfin) = explode('-', $maDateFin);
             $warranty = 0;
@@ -624,9 +632,11 @@ class PluginManufacturersimportsPostImport extends CommonDBTM
             $warranty += $mfin;
         }
 
-        if (isset($maDate)
+        if (
+            isset($maDate)
             && $maDate != "0000-00-00"
-            && $maDate != false) {
+            && $maDate != false
+        ) {
             //warranty for life
             if ($warranty > 120) {
                 $warranty = -1;
@@ -646,14 +656,18 @@ class PluginManufacturersimportsPostImport extends CommonDBTM
             self::saveInfocoms($options, $values['display']);
 
             // on cree un doc dans GLPI qu'on va lier au materiel
-            if ($adddoc != 0
-                && $suppliername != PluginManufacturersimportsConfig::DELL) {
-                $options                = ["itemtype"     => $values['type'],
-                                           "ID"           => $values['ID'],
-                                           "url"          => $values['url'],
-                                           "entities_id"  => $values['line']["entities_id"],
-                                           "rubrique"     => $rubrique,
-                                           "suppliername" => $suppliername];
+            if (
+                $adddoc != 0
+                && $suppliername != PluginManufacturersimportsConfig::DELL
+            ) {
+                $options = [
+                    "itemtype"     => $values['type'],
+                    "ID"           => $values['ID'],
+                    "url"          => $values['url'],
+                    "entities_id"  => $values['line']["entities_id"],
+                    "rubrique"     => $rubrique,
+                    "suppliername" => $suppliername
+                ];
                 $values["documents_id"] = self::addDocument($options);
             }
 
@@ -669,11 +683,11 @@ class PluginManufacturersimportsPostImport extends CommonDBTM
             $log_clean = new PluginManufacturersimportsLog();
             $log_clean->deleteByCriteria(
                 [
-                                            'items_id'      => $values['ID'],
-                                            'itemtype'      => $values['type'],
-                                            'import_status' => 2,
-                                            'LIMIT'         => 1
-                                         ]
+                    'items_id'      => $values['ID'],
+                    'itemtype'      => $values['type'],
+                    'import_status' => 2,
+                    'LIMIT'         => 1
+                ]
             );
             if (isset($_SESSION["glpi_plugin_manufacturersimports_total"])) {
                 $_SESSION["glpi_plugin_manufacturersimports_total"] += 1;
@@ -879,7 +893,7 @@ class PluginManufacturersimportsPostImport extends CommonDBTM
         if ($display) {
             if (!empty($contents)) {
                 switch ($suppliername) {
-                    case PluginManufacturersimportsConfig::LENOVO :
+                    case PluginManufacturersimportsConfig::LENOVO:
                         $msgerr = self::importWarrantyInfo($suppliername, $contents);
                         break;
                     default:
@@ -888,5 +902,45 @@ class PluginManufacturersimportsPostImport extends CommonDBTM
             }
             echo "<td>$msgerr</td>";
         }
+    }
+
+    /**
+     * getHigherValue
+     *
+     * @param  mixed $data
+     * @param  mixed $format
+     * @param  mixed $pos
+     * @return string
+     */
+    public static function getHigherValue(array $data, $format = 'int', $pos = false): string
+    {
+        $max = 0;
+        $max_pos = 0;
+        foreach ($data as $i => $obj) {
+            $trim  = trim($obj);
+
+            switch ($format) {
+                case 'date':
+                case 'timestamp':
+                    Toolbox::logInFile('manufac', print_r($trim, true));
+                    $val = strtotime($trim);
+                    Toolbox::logInFile('manufac', print_r($val, true));
+                    break;
+                default:
+                    $val = intval($trim);
+                    break;
+            }
+
+            if ($val > $max) {
+                $max = $val;
+                $max_pos = $i;
+            }
+        }
+
+        if ($pos == true) {
+            return $max_pos;
+        }
+
+        return $max;
     }
 }

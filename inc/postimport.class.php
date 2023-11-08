@@ -922,9 +922,7 @@ class PluginManufacturersimportsPostImport extends CommonDBTM
             switch ($format) {
                 case 'date':
                 case 'timestamp':
-                    Toolbox::logInFile('manufac', print_r($trim, true));
                     $val = strtotime($trim);
-                    Toolbox::logInFile('manufac', print_r($val, true));
                     break;
                 default:
                     $val = intval($trim);

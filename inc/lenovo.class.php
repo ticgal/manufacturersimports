@@ -144,16 +144,17 @@ class PluginManufacturersimportsLenovo extends PluginManufacturersimportsManufac
             foreach ($data['UpmaWarranties'] as $warranty) {
                 $warranties[] = $warranty[$field];
             }
-        } elseif (isset($data['BaseWarranties'])) {
+        }
+        if (isset($data['BaseWarranties'])) {
             foreach ($data['BaseWarranties'] as $warranty) {
                 $warranties[] = $warranty[$field];
             }
-        } else {
-            return '';
         }
 
         $myDate = PluginManufacturersimportsPostImport::getHigherValue($warranties, 'date');
-        $myDate = PluginManufacturersimportsPostImport::checkDate(date('Y-m-d', $myDate));
+        if (!empty($myDate)) {
+            $myDate = PluginManufacturersimportsPostImport::checkDate(date('Y-m-d', $myDate));
+        }
 
         return $myDate;
     }
@@ -180,16 +181,17 @@ class PluginManufacturersimportsLenovo extends PluginManufacturersimportsManufac
             foreach ($data['UpmaWarranties'] as $warranty) {
                 $warranties[] = $warranty[$field];
             }
-        } elseif (isset($data['BaseWarranties'])) {
+        }
+        if (isset($data['BaseWarranties'])) {
             foreach ($data['BaseWarranties'] as $warranty) {
                 $warranties[] = $warranty[$field];
             }
-        } else {
-            return '';
         }
 
         $myDate = PluginManufacturersimportsPostImport::getHigherValue($warranties, 'date');
-        $myDate = PluginManufacturersimportsPostImport::checkDate(date('Y-m-d', $myDate));
+        if (!empty($myDate)) {
+            $myDate = PluginManufacturersimportsPostImport::checkDate(date('Y-m-d', $myDate));
+        }
 
         return $myDate;
     }
@@ -199,6 +201,7 @@ class PluginManufacturersimportsLenovo extends PluginManufacturersimportsManufac
      */
     public function getExpirationDate($contents)
     {
+        //Toolbox::logInFile('manufact', print_r($contents, true));
         $data_key = "var ds_warranties";
         $field  = "End";
 
@@ -216,16 +219,17 @@ class PluginManufacturersimportsLenovo extends PluginManufacturersimportsManufac
             foreach ($data['UpmaWarranties'] as $warranty) {
                 $warranties[] = $warranty[$field];
             }
-        } elseif (isset($data['BaseWarranties'])) {
+        }
+        if (isset($data['BaseWarranties'])) {
             foreach ($data['BaseWarranties'] as $warranty) {
                 $warranties[] = $warranty[$field];
             }
-        } else {
-            return '';
         }
 
         $myDate = PluginManufacturersimportsPostImport::getHigherValue($warranties, 'date');
-        $myDate = PluginManufacturersimportsPostImport::checkDate(date('Y-m-d', $myDate));
+        if (!empty($myDate)) {
+            $myDate = PluginManufacturersimportsPostImport::checkDate(date('Y-m-d', $myDate));
+        }
 
         return $myDate;
     }
@@ -255,13 +259,12 @@ class PluginManufacturersimportsLenovo extends PluginManufacturersimportsManufac
                 $warranties[] = $warranty[$field];
                 $infos[] = $warranty['Name'];
             }
-        } elseif (isset($data['BaseWarranties'])) {
+        }
+        if (isset($data['BaseWarranties'])) {
             foreach ($data['BaseWarranties'] as $warranty) {
                 $warranties[] = $warranty[$field];
                 $infos[] = $warranty['Name'];
             }
-        } else {
-            return '';
         }
 
         $pos = PluginManufacturersimportsPostImport::getHigherValue($warranties, 'date', true);

@@ -1,5 +1,9 @@
 # Manufacturers Imports CHANGELOG
 
+## [3.2.2] - 2025-06-30
+### Fixed
+- Cron checks the configuration by supplier first
+
 ## 3.2.1 - 2023-11-21
 ### Bugfixes
 - Fix Lenovo Warranties, including BaseWarranties and UpmaWarranties

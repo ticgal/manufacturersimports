@@ -109,7 +109,10 @@ class PluginManufacturersimportsImport extends CommonDBTM
         global $DB;
 
         $config = new PluginManufacturersimportsConfig();
-        $config->getFromDBByCrit(['name' => $supplier]);
+        if (!$config->getFromDBByCrit(['name' => $supplier])) {
+            $task->log(sprintf(__('No config for supplier %s', 'manufacturersimports'), $supplier));
+            return 0;
+        }
 
         $log = new PluginManufacturersimportsLog();
 
